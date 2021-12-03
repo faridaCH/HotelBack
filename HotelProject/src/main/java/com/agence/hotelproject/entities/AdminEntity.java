@@ -8,7 +8,7 @@ import java.util.Objects;
 public class AdminEntity {
     private int id;
     private String username;
-    private int password;
+    private String password;
     private String role;
 
     @Id
@@ -34,11 +34,11 @@ public class AdminEntity {
 
     @Basic
     @Column(name = "password", nullable = false)
-    public int getPassword() {
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(int password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 
