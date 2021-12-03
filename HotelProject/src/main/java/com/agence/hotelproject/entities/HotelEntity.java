@@ -10,9 +10,9 @@ public class HotelEntity {
     private String nom;
     private Etoile etoiles;
     private String adresse;
-    private int telephone;
-    private int email;
-    private int ville;
+    private String telephone;
+    private String email;
+    private String ville;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -37,6 +37,7 @@ public class HotelEntity {
 
     @Basic
     @Column(name = "etoiles")
+    @Enumerated(EnumType.STRING)
     public Etoile getEtoiles() {
         return etoiles;
     }
@@ -57,31 +58,31 @@ public class HotelEntity {
 
     @Basic
     @Column(name = "telephone")
-    public int getTelephone() {
+    public String getTelephone() {
         return telephone;
     }
 
-    public void setTelephone(int telephone) {
+    public void setTelephone(String telephone) {
         this.telephone = telephone;
     }
 
     @Basic
     @Column(name = "email")
-    public int getEmail() {
+    public String getEmail() {
         return email;
     }
 
-    public void setEmail(int email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
     @Basic
     @Column(name = "ville")
-    public int getVille() {
+    public String getVille() {
         return ville;
     }
 
-    public void setVille(int ville) {
+    public void setVille(String ville) {
         this.ville = ville;
     }
 
