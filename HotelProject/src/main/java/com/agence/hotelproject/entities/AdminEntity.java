@@ -11,6 +11,20 @@ public class AdminEntity {
     private String password;
     private String role;
 
+    public AdminEntity() {
+
+    }
+    public AdminEntity(String username, String password, String role) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
+
+    public AdminEntity(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)

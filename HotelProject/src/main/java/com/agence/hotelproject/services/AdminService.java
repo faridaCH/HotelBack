@@ -3,9 +3,11 @@ package com.agence.hotelproject.services;
 
 import com.agence.hotelproject.entities.AdminEntity;
 import com.agence.hotelproject.repositories.AdminRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.InvalidObjectException;
@@ -16,13 +18,21 @@ import java.util.regex.Pattern;
 
 @Service
     public class AdminService {
-        
+
+    // injection d'independance
+    @Autowired
+    private AdminRepository adminRepository;
+      /*
         //autre façon d'injecter les dépendances
         private AdminRepository adminRepository;
 
         public AdminService(AdminRepository adminRepository ){
             this.adminRepository = adminRepository;
         }
+       */
+
+    @Autowired
+    private PasswordEncoder encoder;
 
         public Iterable<AdminEntity> findAll(  ) {
             return adminRepository.findAll();
@@ -45,7 +55,7 @@ import java.util.regex.Pattern;
             return adminRepository.findAll( paging );
         }
 
-
+/*
     // check admin email ( a verifier )
     public static boolean validateEmail(String emailStr) {
         Pattern VALID_EMAIL_ADDRESS_REGEX =
@@ -61,22 +71,19 @@ import java.util.regex.Pattern;
         return  Pattern.compile(str).matcher(phone).matches();
 
     }
-
+*/
     // check  admin attributes
     private void checkAdmin( AdminEntity admin ) throws InvalidObjectException {
 
-        // check  Nom complet
+        // check  UserName   ----> ( attention il faut checker aussi l'unicité de user name )
         Pattern VALID_NAME=Pattern.compile("[A-Za-z]{3,25}",Pattern.CASE_INSENSITIVE);
         Matcher matcher = VALID_NAME.matcher(admin.getUsername());
-        // return matcher.find();
         if (!matcher.find()) {
-            throw new InvalidObjectException(" Username invalide ");
+            throw new InvalidObjectException(" UserName invalide ");
         }
-
-     
-
-        // check Email
-        if (admin.getPassword().length() <= 4 ) {
+        
+        // check passeword
+        if (admin.getPassword().length() <= 2 ) {
             throw new InvalidObjectException("Password invalide ");
         }
 
@@ -84,20 +91,19 @@ import java.util.regex.Pattern;
         if (admin.getRole() ==null ) {
             throw new InvalidObjectException(" Role invalide ");
         }
-
-
     }
 
         public AdminEntity findAdmin(int id) {
             return adminRepository.findById(id).get();
         }
-        
 
 
-        public void add( AdminEntity admin ) throws InvalidObjectException {
-            checkAdmin(admin);
-            adminRepository.save(admin);
-        }
+    public void add(AdminEntity admin) throws InvalidObjectException {
+        checkAdmin(admin);
+        admin.setPassword(encoder.encode(admin.getPassword()));
+
+        adminRepository.save(admin);
+    }
 
 
         public void edit( int id , AdminEntity admin) throws InvalidObjectException , NoSuchElementException {
@@ -106,10 +112,11 @@ import java.util.regex.Pattern;
                 AdminEntity adminExistant = adminRepository.findById(id).get();
 
                 adminExistant.setUsername( admin.getUsername() );
-                adminExistant.setPassword( admin.getPassword() );
                 adminExistant.setRole( admin.getRole() );
                 adminRepository.save( adminExistant );
-
+                if( admin.getPassword().length() > 0 ){
+                    adminExistant.setPassword( encoder.encode( admin.getPassword() ) );
+                }
             }catch ( NoSuchElementException e ){
                 throw e;
             }
@@ -118,6 +125,23 @@ import java.util.regex.Pattern;
 
     public void delete(int id) {
         adminRepository.deleteById(id);
+    }
+
+    public void editProfil( int id , AdminEntity u) throws NoSuchElementException {
+        try{
+            AdminEntity adminExistant = adminRepository.findById(id).get();
+
+
+            adminExistant.setUsername( u.getUsername() );
+            adminExistant.setPassword( u.getPassword() );
+            // ligne a mettre en commentaire ou a supprimmer le user ne doit pas modifier son role
+            adminExistant.setRole( u.getRole() );
+
+            adminRepository.save( adminExistant );
+
+        }catch ( NoSuchElementException e ){
+            throw e;
+        }
     }
     }
 

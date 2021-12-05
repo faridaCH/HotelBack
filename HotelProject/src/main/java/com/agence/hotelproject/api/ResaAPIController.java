@@ -15,7 +15,7 @@ import java.net.URI;
 import java.util.NoSuchElementException;
 
 @RestController
-@RequestMapping("/api/patient")
+@RequestMapping("/api/resa")
 public class ResaAPIController {
 @Autowired
   private  ResaService resaService;
@@ -24,7 +24,7 @@ public class ResaAPIController {
     @GetMapping(value="" , produces = "application/json")
     public Iterable<ResaEntity> getAll(HttpServletRequest request ){
         String search = request.getParameter("search");
-        System.out.println( "Recherche de patient avec param = " + search );
+        System.out.println( "Recherche de resa avec param = " + search );
         return resaService.findAll( search );
 
     }
