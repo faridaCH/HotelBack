@@ -72,6 +72,7 @@ import java.util.regex.Pattern;
 
     }
 */
+
     // check  admin attributes
     private void checkAdmin( AdminEntity admin ) throws InvalidObjectException {
 
@@ -81,7 +82,10 @@ import java.util.regex.Pattern;
         if (!matcher.find()) {
             throw new InvalidObjectException(" UserName invalide ");
         }
-        
+            if (!adminRepository.findByUsername(admin.getUsername()).equals(null)){
+                throw new InvalidObjectException(" UserName déja utilisé ");
+            }
+
         // check passeword
         if (admin.getPassword().length() <= 2 ) {
             throw new InvalidObjectException("Password invalide ");

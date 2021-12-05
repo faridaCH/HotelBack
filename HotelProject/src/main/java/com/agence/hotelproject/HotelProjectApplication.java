@@ -12,7 +12,7 @@ public class HotelProjectApplication {
     public static void main(String[] args) {
         SpringApplication.run(HotelProjectApplication.class, args);
     }
-/*
+
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
@@ -24,6 +24,5 @@ public class HotelProjectApplication {
             }
         };
     }
- */
 
 }
