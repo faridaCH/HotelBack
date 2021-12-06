@@ -50,7 +50,7 @@ public class AdminAPIController {
     }
 
     @PostMapping(value="" , consumes = "application/json")
-    public ResponseEntity<AdminEntity> add( @RequestBody AdminEntity admin ){
+    public ResponseEntity<Object> add( @RequestBody AdminEntity admin ){
         System.out.println( admin );
         try{
             adminService .add( admin );
@@ -61,7 +61,9 @@ public class AdminAPIController {
             return ResponseEntity.created( uri ).body(admin);
 
         }catch ( InvalidObjectException e ){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST , e.getMessage() );
+            System.out.println("erreur "+e.getMessage());
+           // throw new ResponseStatusException(HttpStatus.BAD_REQUEST , e.getMessage() );
+     return ResponseEntity.badRequest().body(e);
         }
 
     }
